@@ -96,7 +96,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     // if response status is 200 then showing success in Container and stopping all other animations
     if (response.statusCode == 200) {
       if (res['success'] == true)
-        responseString = "SUCCESS";
+        responseString = "success";
       else
         responseString = "FAILURE";
       setState(() {
@@ -144,13 +144,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                // color: Colors.red,
                 margin:
                     EdgeInsets.fromLTRB(0, 0, 0, apiResponseAnimation.value),
-                // padding: EdgeInsets.all(20.0),
                 child: Text(
                   responseString.toString(),
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
                 ),
               )
             ],
@@ -163,7 +161,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   // _getCircleWithLogo() function returns a Circular Container of logo which is used as
   _getCircleWithLogo() {
     return Visibility(
-      visible: (!showGIF && !isSuccess),
+      visible: (!showGIF && !isSuccess),//flutter build apk --split-per-abi
       child: Container(
         alignment: Alignment.bottomCenter,
         margin: EdgeInsets.fromLTRB(0, 0, 0, 75),
@@ -284,7 +282,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       key: scaffoldKey,
       appBar: AppBar(
         title: Text(
-          "Hello Cred",
+          "Hello CRED",
           style: TextStyle(fontFamily: 'Sol Thin'),
         ),
         centerTitle: true,
