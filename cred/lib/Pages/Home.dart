@@ -8,7 +8,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
-
   Home({Key key}) : super(key: key);
 
   @override
@@ -18,7 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   GlobalKey<ScaffoldState> scaffoldKey;
   Animation animation;
-  bool isSuccess = false, showGIF = false;
+  bool isSuccess = false, showGIF = false, isToogleOn = false;
   AnimationController targetController,
       apiResponseController,
       animationController;
@@ -89,23 +88,33 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   // API Call to check that is success or failure
-  _getSuccessCall() async {
-    String url = successUrl;
+  _getAPICall() async {
+    String url ;//= successUrl;
+    if(isToogleOn)
+      url = successUrl;
+    else
+      url = failureUrl;
     http.Response response = await http.get(url);
     var res = jsonDecode(response.body);
-    // if response status is 200 then showing success in Container and stopping all other animations
+
+    // if response status is 200 then showing success and 404 then Failure in Container and stopping all other animations
     if (response.statusCode == 200) {
       if (res['success'] == true)
-        responseString = "success";
-      else
+        responseString = "SUCCESS";
+
+    }else if(response.statusCode == 404){
+      if (res['success'] == false)
         responseString = "FAILURE";
-      setState(() {
-        showGIF = false;
-        isSuccess = true;
-        apiResponseController.forward();
-        targetController.forward();
-      });
+
     }
+
+    setState(() {
+      showGIF = false;
+      isSuccess = true;
+      apiResponseController.forward();
+      targetController.forward();
+    });
+
   }
 
   _getArrowGIF() {
@@ -161,7 +170,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   // _getCircleWithLogo() function returns a Circular Container of logo which is used as
   _getCircleWithLogo() {
     return Visibility(
-      visible: (!showGIF && !isSuccess),//flutter build apk --split-per-abi
+      visible: (!showGIF && !isSuccess), //flutter build apk --split-per-abi
       child: Container(
         alignment: Alignment.bottomCenter,
         margin: EdgeInsets.fromLTRB(0, 0, 0, 75),
@@ -263,7 +272,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 });
                 // Waiting for GIF to complete it's rotations that's why making API call after 3 seconds.
                 Future.delayed(Duration(seconds: 3), () {
-                  _getSuccessCall();
+                  _getAPICall();
                 });
               },
             ),
@@ -290,6 +299,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          Switch(
+            activeColor: Colors.black45,
+            value: isToogleOn,
+            onChanged: (val) {
+              _toggle();
+            },
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: MaterialButton(
@@ -336,4 +352,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       msg: text,
     );
   }
+  _toggle() {
+    setState(() => isToogleOn = !isToogleOn);
+  }
+
 }
