@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cred.vsp.cred">
    <application
-        android:label="cred"
+        android:label="CRED Assignment"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
